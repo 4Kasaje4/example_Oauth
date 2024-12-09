@@ -233,7 +233,7 @@ app.post("/token", async (req, res) => {
       };
 
       const payloadRefreshToken = {
-        type: "refresh",
+        type: "refresh_token",
         user_id: auth_code_data.user_id,
         scope: client.scope,
         grant_type: grant_type.AUTHORIZATION_CODE,
@@ -244,7 +244,7 @@ app.post("/token", async (req, res) => {
 
       res.status(200).json({ status: status.success, access_token: access_token, refresh_token: refresh_token });
       return;
-    } else if (body.grant_type === grant_type.REFRESH) {
+    } else if (body.grant_type === grant_type.REFRESH_TOKEN) {
       if (!body.refresh_token) {
         res.status(400).json({ status: status.error, message: "refresh_token not found" });
         return;
@@ -252,7 +252,7 @@ app.post("/token", async (req, res) => {
 
       const verifyRefreshToken = jwt.verify(body.refresh_token, "sampleSecretRefreshToken") as IToken;
 
-      if (verifyRefreshToken.type !== "refresh") {
+      if (verifyRefreshToken.type !== grant_type.REFRESH_TOKEN) {
         res.status(400).json({ status: status.error, message: "type is not refresh" });
         return;
       }
@@ -265,7 +265,7 @@ app.post("/token", async (req, res) => {
       };
 
       const payloadRefreshToken = {
-        type: "refresh",
+        type: "refresh_token",
         user_id: verifyRefreshToken.user_id,
         scope: verifyRefreshToken.scope,
         grant_type: verifyRefreshToken.grant_type,

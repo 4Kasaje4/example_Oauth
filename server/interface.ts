@@ -13,7 +13,7 @@ export const status = {
 
 export const grant_type = {
   AUTHORIZATION_CODE: "authorization_code",
-  REFRESH: "refresh",
+  REFRESH_TOKEN: "refresh_token",
   CLIENT_CREDENTIALS: "client_credentials",
 };
 

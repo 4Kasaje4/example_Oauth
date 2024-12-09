@@ -172,7 +172,9 @@ http://localhost:2003/api
 }
 ```
 
-## 4. Refresh token
+# Grant Type
+
+# Refresh token
 
 ### Endpoint
 
@@ -185,7 +187,7 @@ http://localhost:2003/token
 
 ### Parameters
 
-- grant_type = refresh
+- grant_type = refresh_token
 - client_id
 - client_secret
 - refresh_token
@@ -200,7 +202,7 @@ http://localhost:2003/token
 }
 ```
 
-# Grant type
+# Grant Type
 
 # Client credentials
 
