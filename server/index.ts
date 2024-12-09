@@ -125,7 +125,7 @@ app.post("/login", async (req, res) => {
 });
 
 // On product use method post
-app.get("/authorize", async (req, res) => {
+app.get("/authorize_of_authorization_code", async (req, res) => {
   try {
     const query = req.query as unknown as IAuthorize;
     const inputScope = query.scope?.split(",");
@@ -165,7 +165,7 @@ app.get("/authorize", async (req, res) => {
         res.status(500).json({ status: status.error, message: "internal server error" });
         return;
       } else {
-        const redirect_loginPage = `http://localhost:3000/login?client_id=${client.client_id}&state=${query.state}`;
+        const redirect_loginPage = `http://localhost:3000/authorization_code?client_id=${client.client_id}&state=${query.state}`;
         res.status(200).redirect(redirect_loginPage);
       }
     });

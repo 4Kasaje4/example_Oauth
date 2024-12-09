@@ -92,7 +92,7 @@ You can edit in `index.ts` file
 ```
 method : GET
 
-http://localhost:2003/authorize
+http://localhost:2003/authorize_of_authorization_code
 ```
 
 ### Parameters
