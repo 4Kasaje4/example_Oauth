@@ -1,10 +1,5 @@
 # Oauth
 
-## Grant Type
-
-- Authorization code
-- Client credentials
-
 - Client Side
 
   - port 3000
