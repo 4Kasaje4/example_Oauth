@@ -1,6 +1,6 @@
 # Oauth
 
-## Grant type
+## Grant Type
 
 - Authorization code
 - Client credentials
@@ -81,9 +81,7 @@ You can edit in `index.ts` file
     const password = YOUR_PASSWORD
 ```
 
-# Grant Type
-
-# Authorization code
+# 📌 Authorization code
 
 ## 1. Authorize user
 
@@ -172,9 +170,7 @@ http://localhost:2003/api
 }
 ```
 
-# Grant Type
-
-# Refresh token
+# 📌 Refresh token
 
 ### Endpoint
 
@@ -202,9 +198,7 @@ http://localhost:2003/token
 }
 ```
 
-# Grant Type
-
-# Client credentials
+# 📌 Client credentials
 
 ## 1. Request Access token
 
@@ -263,9 +257,7 @@ http://localhost:2003
 }
 ```
 
-# Grant Type
-
-# Implicit
+# 📌 Implicit
 
 ## 1. Authorize User
 
