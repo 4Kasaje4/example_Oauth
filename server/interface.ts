@@ -15,6 +15,7 @@ export const grant_type = {
   AUTHORIZATION_CODE: "authorization_code",
   REFRESH_TOKEN: "refresh_token",
   CLIENT_CREDENTIALS: "client_credentials",
+  IMPLICIT: "implicit",
 };
 
 export interface IAuthorize {

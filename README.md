@@ -206,6 +206,8 @@ http://localhost:2003/token
 
 # Client credentials
 
+## 1. Request Access token
+
 ### Endpoint
 
 ```
@@ -227,5 +229,87 @@ http://localhost:2003/token
 {
     "status": "SUCCESS",
     "access_token": "eyJhbGciOiJI..._m7ipRVkQg"
+}
+```
+
+## 2. Get data
+
+### Endpoint
+
+```
+method: POST
+headers : authorization : Bearer YOUR_ACCESS_TOKEN
+
+http://localhost:2003
+```
+
+### Parameters
+
+- grant_type = client_credentials
+- clirnt_id
+- client_secret
+
+### Response
+
+```
+{
+    "status": "SUCCESS",
+    "data": {
+        "client_id": "77c052ca-9427-48d3-9b18-b88b75f2b15d",
+        "client_secret": "a8ca4032-e9b59187934",
+        "redirect_uri": "http://localhost:5000/redirect_page",
+        "scope": "email,username"
+    }
+}
+```
+
+# Grant Type
+
+# Implicit
+
+## 1. Authorize User
+
+### Endpoint
+
+```
+method: POST
+
+http://localhost:2003/authorize_of_implicit
+```
+
+### Parameters
+
+- client_id
+- response_type = code
+- redirect_uri
+- scope
+- state
+
+### Response
+
+```
+{redirect_uri}?access_token={access_token}&state={YOUR_STATE}
+```
+
+## 2. Get Data
+
+### Endpoint
+
+```
+method : POST
+headers : authorization : Bearer YOUR_ACCESS_TOKEN
+
+http://localhost:2003/api
+```
+
+### Response
+
+```
+{
+    "status": "SUCCESS",
+    "data": {
+        "email": "sampleMail@example.com",
+        "username": "SampleUsername"
+    }
 }
 ```
