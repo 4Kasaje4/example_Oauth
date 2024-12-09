@@ -1,5 +1,10 @@
 # Oauth
 
+## Grant type
+
+- Authorization code
+- Client credentials
+
 - Client Side
 
   - port 3000
@@ -195,9 +200,9 @@ http://localhost:2003/token
 }
 ```
 
-## Grant type
+# Grant type
 
-## Client credentials
+# Client credentials
 
 ### Endpoint
 
@@ -222,4 +227,3 @@ http://localhost:2003/token
     "access_token": "eyJhbGciOiJI..._m7ipRVkQg"
 }
 ```
-
