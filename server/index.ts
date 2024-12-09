@@ -101,7 +101,6 @@ app.post("/login", async (req, res) => {
 
     const nowInMilli = Date.now();
     const expires_at = nowInMilli + 1000 * (60 * 10);
-    console.log(nowInMilli);
 
     db.run(
       "INSERT INTO authorization_code(authorization_code, user_id, client_id, expires_at) VALUES(?, ?, ?, ?)",
@@ -230,12 +229,14 @@ app.post("/token", async (req, res) => {
         type: "access",
         user_id: auth_code_data.user_id,
         scope: client.scope,
+        grant_type: grant_type.AUTHORIZATION_CODE,
       };
 
       const payloadRefreshToken = {
         type: "refresh",
         user_id: auth_code_data.user_id,
         scope: client.scope,
+        grant_type: grant_type.AUTHORIZATION_CODE,
       };
 
       const access_token = jwt.sign(payloadAccessToken, "sampleSecretAccessToken", { expiresIn: "5h" });
@@ -251,8 +252,6 @@ app.post("/token", async (req, res) => {
 
       const verifyRefreshToken = jwt.verify(body.refresh_token, "sampleSecretRefreshToken") as IToken;
 
-      console.log(verifyRefreshToken);
-
       if (verifyRefreshToken.type !== "refresh") {
         res.status(400).json({ status: status.error, message: "type is not refresh" });
         return;
@@ -262,12 +261,14 @@ app.post("/token", async (req, res) => {
         type: "access",
         user_id: verifyRefreshToken.user_id,
         scope: verifyRefreshToken.scope,
+        grant_type: verifyRefreshToken.grant_type,
       };
 
       const payloadRefreshToken = {
         type: "refresh",
         user_id: verifyRefreshToken.user_id,
         scope: verifyRefreshToken.scope,
+        grant_type: verifyRefreshToken.grant_type,
       };
 
       const access_token = jwt.sign(payloadAccessToken, "sampleSecretAccessToken", { expiresIn: "5h" });
@@ -275,9 +276,33 @@ app.post("/token", async (req, res) => {
 
       res.status(200).json({ status: status.success, access_token: access_token, refresh_token: refresh_token });
       return;
+    } else if (body.grant_type === grant_type.CLIENT_CREDENTIALS) {
+      const clientData = await getClientByClientID(body.client_id);
+
+      if (!clientData) {
+        res.status(400).json({ status: status.error, message: "client not found" });
+        return;
+      }
+
+      if (clientData.client_secret !== body.client_secret) {
+        res.status(400).json({ status: status.error, message: "client_secret is not match" });
+        return;
+      }
+
+      const payloadAccessToken = {
+        client_id: clientData.client_id,
+        type: "access",
+        grant_type: grant_type.CLIENT_CREDENTIALS,
+      };
+
+      const access_token = jwt.sign(payloadAccessToken, "sampleSecretAccessToken", { expiresIn: "5h" });
+
+      res.status(200).json({ status: status.success, access_token: access_token });
+      return;
     }
   } catch (error) {
     console.log(error);
+    res.json({ status: status.error, error });
   }
 });
 
@@ -299,16 +324,26 @@ app.post("/api", async (req, res) => {
       return;
     }
 
-    const userData: any = await getDataScope(verifyAccessToken.user_id, verifyAccessToken.scope);
+    if (verifyAccessToken.grant_type === grant_type.AUTHORIZATION_CODE) {
+      const userData: any = await getDataScope(verifyAccessToken.user_id, verifyAccessToken.scope);
 
-    const scope = verifyAccessToken.scope.split(",");
+      const scope = verifyAccessToken.scope.split(",");
 
-    const response: Record<string, any> = {};
-    scope.forEach((value: any) => {
-      response[value] = userData[value];
-    });
+      const response: Record<string, any> = {};
+      scope.forEach((value: any) => {
+        response[value] = userData[value];
+      });
 
-    res.json({ status: status.success, data: response });
+      res.json({ status: status.success, data: response });
+      return;
+    } else if (verifyAccessToken.grant_type === grant_type.CLIENT_CREDENTIALS) {
+      const clientData = await getClientByClientID(verifyAccessToken.client_id);
+
+      console.log(clientData);
+
+      res.status(200).json({ status: status.success, data: clientData });
+      return;
+    }
   } catch (error) {
     console.log(error);
     res.json({ status: status.error, error });

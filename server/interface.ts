@@ -14,6 +14,7 @@ export const status = {
 export const grant_type = {
   AUTHORIZATION_CODE: "authorization_code",
   REFRESH: "refresh",
+  CLIENT_CREDENTIALS: "client_credentials",
 };
 
 export interface IAuthorize {
